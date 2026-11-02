@@ -1,267 +1,52 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#101827">
-<title>تحدي الضرب</title>
-<style>
-*{box-sizing:border-box}
-body{
- margin:0;background:#101827;color:white;
- font-family:Arial,sans-serif;padding:20px;
-}
-.app{max-width:520px;margin:auto}
-header{text-align:center;padding:22px 0}
-header h1{font-size:30px;margin:5px}
-header p{color:#aab5c5}
-.card{
- background:#1d293b;border:1px solid #34445b;
- border-radius:20px;padding:20px;margin:15px 0;
-}
-.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.stat{text-align:center;background:#26364c;padding:16px;border-radius:14px}
-.stat strong{display:block;font-size:27px;color:#55d6a2}
-.stat span{font-size:13px;color:#bdc9d8}
-.question{text-align:center;padding:28px 10px}
-.question h2{font-size:42px;margin:20px 0}
-button,select{
- border:0;border-radius:12px;padding:14px;
- font-size:16px;font-weight:bold;cursor:pointer;
-}
-.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.yes{background:#20b982;color:#062d20}
-.no{background:#e45b69;color:white}
-.primary{background:#4388f5;color:white;width:100%;margin-top:10px}
-.secondary{background:#34445b;color:white;width:100%;margin-top:10px}
-input,select{
- background:#34445b;color:white;width:100%;
- margin:8px 0;padding:13px;
-}
-label{display:block;margin-top:12px;color:#d7e0eb}
-.feedback{text-align:center;font-size:20px;font-weight:bold;min-height:30px}
-.small{font-size:13px;color:#aab5c5;line-height:1.8}
-.progress{height:9px;background:#34445b;border-radius:20px;overflow:hidden}
-.progress div{height:100%;background:#20b982;width:0}
-footer{text-align:center;color:#8794a7;font-size:12px;margin:25px}
-</style>
-</head>
-<body>
-<div class="app">
+✖️
+تحدي الضرب
+تدرّب قليلاً كل يوم، وأتقن جداول الضرب
+0
+إجمالي الأسئلة
+0%
+نسبة النجاح
+0
+إجابات صحيحة
+0
+إجابات خاطئة
+🎯 سؤال الضرب
+اضغط ابدأ لبدء التدريب
+؟ × ؟ = ؟
+هل العبارة صحيحة أم خاطئة؟
+✓ صح
+✕ خطأ
 
-<header>
- <div style="font-size:45px">✖️</div>
- <h1>تحدي الضرب</h1>
- <p>تدرّب قليلاً كل يوم، وأتقن جداول الضرب</p>
-</header>
 
-<div class="stats">
- <div class="stat"><strong id="total">0</strong><span>إجمالي الأسئلة</span></div>
- <div class="stat"><strong id="accuracy">0%</strong><span>نسبة النجاح</span></div>
- <div class="stat"><strong id="correct">0</strong><span>إجابات صحيحة</span></div>
- <div class="stat"><strong id="wrong">0</strong><span>إجابات خاطئة</span></div>
-</div>
+▶ ابدأ التدريب إيقاف التدريب
+⚙️ إعدادات التدريب
+الفترة بين الأسئلة (بالدقائق)
+  دقيقة واحدة
+  دقيقتان
+  5 دقائق
+  10 دقائق
+  15 دقيقة
+  30 دقيقة
+  ساعة
+ 
+وقت بدء الأسئلة
+وقت إيقاف الأسئلة
+أيام إرسال الأسئلة
+الأحد
+الاثنين
+الثلاثاء
+الأربعاء
+الخميس
+الجمعة
+السبت
+الجدولة غير مفعّلة بعد.
+الجداول المستخدمة
+حالياً جميع الجداول من 1 إلى 12 مفعّلة.
+حفظ الإعدادات
+📈 مستوى تقدمك
+لم تبدأ التدريب بعد.
 
-<div class="card">
- <h3>🎯 سؤال الضرب</h3>
- <div class="question">
-  <p id="status">اضغط ابدأ لبدء التدريب</p>
-  <h2 id="problem">؟ × ؟ = ؟</h2>
-  <p>هل العبارة صحيحة أم خاطئة؟</p>
- </div>
- <div class="actions">
-  <button class="yes" onclick="answer(true)">✓ صح</button>
-  <button class="no" onclick="answer(false)">✕ خطأ</button>
- </div>
- <p class="feedback" id="feedback"></p>
- <p class="small" id="explanation" style="text-align:center"></p>
- <button class="primary" onclick="start()">▶ ابدأ التدريب</button>
- <button class="secondary" onclick="pause()">إيقاف التدريب</button>
-</div>
-
-<div class="card">
- <h3>⚙️ إعدادات التدريب</h3>
- <label>الفترة بين الأسئلة (بالدقائق)</label>
- <select id="interval">
-  <option value="1">دقيقة واحدة</option>
-  <option value="2">دقيقتان</option>
-  <option value="5" selected>5 دقائق</option>
-  <option value="10">10 دقائق</option>
-  <option value="15">15 دقيقة</option>
-  <option value="30">30 دقيقة</option>
-  <option value="60">ساعة</option>
- </select>
- <label>الجداول المستخدمة</label>
- <p class="small">حالياً جميع الجداول من 1 إلى 12 مفعّلة.</p>
- <button class="primary" onclick="saveSettings()">حفظ الإعدادات</button>
-</div>
-
-<div class="card">
- <h3>📈 مستوى تقدمك</h3>
- <p id="mastery">لم تبدأ التدريب بعد.</p>
- <div class="progress"><div id="bar"></div></div>
- <p class="small">تُحسب نسبة الإتقان بناءً على سجل إجاباتك.</p>
- <h3>📚 الأسئلة التي تحتاج مراجعة</h3>
- <p id="hard" class="small">لا توجد بيانات بعد.</p>
- <button class="secondary" onclick="resetData()">إعادة ضبط النتائج</button>
-</div>
-
-<footer>تحدي الضرب © 2026</footer>
-</div>
-
-<script>
-const KEY="tahadi_darb_v1";
-let data=JSON.parse(localStorage.getItem(KEY)||"null")||{
- total:0,correct:0,wrong:0,skills:{}
-};
-let current=null;
-let running=false;
-let timer=null;
-let nextAt=0;
-let seconds=0;
-
-function save(){
- localStorage.setItem(KEY,JSON.stringify(data));
- updateStats();
-}
-
-function skill(a,b){
- const k=a+"x"+b;
- if(!data.skills[k]){
-  data.skills[k]={streak:0,wrong:0,correct:0,due:0};
- }
- return data.skills[k];
-}
-
-function chooseQuestion(){
- let pool=[];
- const now=Date.now();
- for(let a=1;a<=12;a++){
-  for(let b=1;b<=12;b++){
-   const s=skill(a,b);
-   let weight=s.due<=now?1:0.15;
-   weight+=Math.min(s.wrong*0.8,8);
-   weight=Math.max(weight,0.1);
-   for(let i=0;i<Math.ceil(weight*3);i++)
-    pool.push([a,b]);
-  }
- }
- let pair=pool[Math.floor(Math.random()*pool.length)];
- let a=pair[0],b=pair[1],result=a*b;
- let isTrue=Math.random()<0.5;
- let shown=result;
- if(!isTrue){
-  let offset=Math.floor(Math.random()*10)+1;
-  shown=result+(Math.random()<0.5?-offset:offset);
-  if(shown<1)shown=result+offset;
- }
- return {a,b,result,shown,isTrue};
-}
-
-function showQuestion(){
- current=chooseQuestion();
- document.getElementById("problem").textContent=
- current.a+" × "+current.b+" = "+current.shown;
- document.getElementById("feedback").textContent="";
- document.getElementById("explanation").textContent="";
- document.getElementById("status").textContent="سؤال جديد";
-}
-
-function answer(value){
- if(!current){
-  document.getElementById("feedback").textContent="ابدأ التدريب أولاً";
-  return;
- }
- const q=current;
- const right=value===q.isTrue;
- const s=skill(q.a,q.b);
- data.total++;
- if(right){
-  data.correct++;
-  s.correct++;
-  s.streak++;
-  s.wrong=Math.max(0,s.wrong-0.3);
-  let minutes=Math.min(60,5*Math.pow(2,Math.min(s.streak,4)));
-  s.due=Date.now()+minutes*60000;
-  document.getElementById("feedback").textContent="✓ إجابة صحيحة، أحسنت!";
-  document.getElementById("feedback").style.color="#55d6a2";
- }else{
-  data.wrong++;
-  s.wrong++;
-  s.streak=0;
-  s.due=Date.now()+60000;
-  document.getElementById("feedback").textContent="✕ إجابة غير صحيحة";
-  document.getElementById("feedback").style.color="#ff7884";
- }
- document.getElementById("explanation").textContent=
- q.a+" × "+q.b+" = "+q.result;
- current=null;
- save();
- if(running){
-  clearTimeout(timer);
-  nextAt=Date.now()+Number(document.getElementById("interval").value)*60000;
-  timer=setTimeout(showQuestion,
-   Number(document.getElementById("interval").value)*60000);
- }
-}
-
-function start(){
- if(running)return;
- running=true;
- showQuestion();
- nextAt=Date.now()+Number(document.getElementById("interval").value)*60000;
- timer=setTimeout(showQuestion,
-  Number(document.getElementById("interval").value)*60000);
- document.getElementById("status").textContent="التدريب يعمل";
-}
-
-function pause(){
- running=false;
- clearTimeout(timer);
- document.getElementById("status").textContent="التدريب متوقف";
-}
-
-function saveSettings(){
- const v=Number(document.getElementById("interval").value);
- if(![1,2,5,10,15,30,60].includes(v))return;
- if(running){
-  clearTimeout(timer);
-  nextAt=Date.now()+v*60000;
-  timer=setTimeout(showQuestion,v*60000);
- }
- alert("تم حفظ الإعدادات");
-}
-
-function updateStats(){
- document.getElementById("total").textContent=data.total;
- document.getElementById("correct").textContent=data.correct;
- document.getElementById("wrong").textContent=data.wrong;
- let pct=data.total?Math.round(data.correct/data.total*100):0;
- document.getElementById("accuracy").textContent=pct+"%";
- document.getElementById("bar").style.width=pct+"%";
- document.getElementById("mastery").textContent=
- "نسبة إجاباتك الصحيحة: "+pct+"%";
- let hard=Object.entries(data.skills)
-  .filter(([k,s])=>s.wrong>0)
-  .sort((x,y)=>y[1].wrong-x[1].wrong)
-  .slice(0,5);
- document.getElementById("hard").textContent=hard.length?
- hard.map(([k,s])=>k.replace("x"," × ")+" (أخطاء: "+Math.round(s.wrong)+")").join("، "):
- "لا توجد أسئلة تحتاج مراجعة حالياً.";
-}
-
-function resetData(){
- if(confirm("هل تريد حذف جميع نتائجك؟")){
-  pause();
-  data={total:0,correct:0,wrong:0,skills:{}};
-  current=null;
-  localStorage.removeItem(KEY);
-  document.getElementById("problem").textContent="؟ × ؟ = ؟";
-  document.getElementById("feedback").textContent="";
-  updateStats();
- }
-}
-updateStats();
-</script>
-</body>
-</html>
+تُحسب نسبة الإتقان بناءً على سجل إجاباتك.
+📚 الأسئلة التي تحتاج مراجعة
+لا توجد بيانات بعد.
+إعادة ضبط النتائج
+تحدي الضرب © 2026
