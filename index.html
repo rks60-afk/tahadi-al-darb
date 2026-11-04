@@ -1,52 +1,143 @@
-✖️
-تحدي الضرب
-تدرّب قليلاً كل يوم، وأتقن جداول الضرب
-0
-إجمالي الأسئلة
-0%
-نسبة النجاح
-0
-إجابات صحيحة
-0
-إجابات خاطئة
-🎯 سؤال الضرب
-اضغط ابدأ لبدء التدريب
-؟ × ؟ = ؟
-هل العبارة صحيحة أم خاطئة؟
-✓ صح
-✕ خطأ
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تحدي الضرب</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#101827;color:white;font-family:Arial,sans-serif;padding:20px;text-align:center}
+h1{color:#60a5fa}
+.card{background:#1e293b;padding:20px;border-radius:16px;margin:15px auto;max-width:450px}
+.stat{display:flex;justify-content:space-around;gap:8px;flex-wrap:wrap}
+.stat div{background:#334155;padding:12px;border-radius:10px;flex:1}
+button,input{padding:13px;margin:7px;border:0;border-radius:10px;font-size:17px}
+button{background:#2563eb;color:white;cursor:pointer}
+input{width:85px;text-align:center}
+.question{font-size:35px;font-weight:bold;margin:25px}
+.green{background:#15803d}
+.red{background:#b91c1c}
+small{color:#cbd5e1}
+</style>
+</head>
+<body>
+<h1>🎯 تحدي الضرب</h1>
+<p>تدرّب قليلاً كل يوم وأتقن جدول الضرب</p>
 
-▶ ابدأ التدريب إيقاف التدريب
-⚙️ إعدادات التدريب
-الفترة بين الأسئلة (بالدقائق)
-  دقيقة واحدة
-  دقيقتان
-  5 دقائق
-  10 دقائق
-  15 دقيقة
-  30 دقيقة
-  ساعة
- 
-وقت بدء الأسئلة
-وقت إيقاف الأسئلة
-أيام إرسال الأسئلة
-الأحد
-الاثنين
-الثلاثاء
-الأربعاء
-الخميس
-الجمعة
-السبت
-الجدولة غير مفعّلة بعد.
-الجداول المستخدمة
-حالياً جميع الجداول من 1 إلى 12 مفعّلة.
-حفظ الإعدادات
-📈 مستوى تقدمك
-لم تبدأ التدريب بعد.
+<div class="card">
+<div class="stat">
+<div>إجمالي الأسئلة<br><b id="total">0</b></div>
+<div>نسبة النجاح<br><b id="rate">0%</b></div>
+<div>الصحيحة<br><b id="correct">0</b></div>
+<div>الخاطئة<br><b id="wrong">0</b></div>
+</div>
+</div>
 
-تُحسب نسبة الإتقان بناءً على سجل إجاباتك.
-📚 الأسئلة التي تحتاج مراجعة
-لا توجد بيانات بعد.
-إعادة ضبط النتائج
-تحدي الضرب © 2026
+<div class="card">
+<h3>⚙️ إعدادات التدريب</h3>
+<label>الفترة بالدقائق</label><br>
+<input id="minutes" type="number" min="1" max="60" value="5">
+<br>
+<button onclick="saveSettings()">حفظ الفترة</button>
+<button onclick="notifyPermission()">تفعيل الإشعارات</button>
+<p id="status"><small>الإشعارات غير مفعّلة</small></p>
+</div>
+
+<div class="card">
+<h3>🎯 سؤال الضرب</h3>
+<div class="question" id="question">؟ × ؟ = ؟</div>
+<p id="result">اضغط ابدأ لبدء التدريب</p>
+<button class="green" onclick="answer(true)">✓ صح</button>
+<button class="red" onclick="answer(false)">✕ خطأ</button>
+<br>
+<button onclick="newQuestion()">ابدأ التدريب</button>
+</div>
+
+<div class="card">
+<h3>⏱️ التذكير</h3>
+<p>السؤال التالي بعد: <b id="countdown">5:00</b></p>
+<button onclick="startTimer()">ابدأ التذكير</button>
+<button onclick="stopTimer()">إيقاف التذكير</button>
+</div>
+
+<script>
+let stats=JSON.parse(localStorage.stats||'{"total":0,"correct":0,"wrong":0}');
+let a,b,c,answerValue=false;
+let interval=null,timer=null;
+let seconds=300;
+
+function update(){
+document.getElementById('total').textContent=stats.total;
+document.getElementById('correct').textContent=stats.correct;
+document.getElementById('wrong').textContent=stats.wrong;
+document.getElementById('rate').textContent=
+(stats.total?Math.round(stats.correct/stats.total*100):0)+'%';
+localStorage.stats=JSON.stringify(stats);
+}
+function newQuestion(){
+a=Math.floor(Math.random()*12)+1;
+b=Math.floor(Math.random()*12)+1;
+answerValue=Math.random()<0.5;
+c=answerValue?a*b:a*b+Math.floor(Math.random()*9)+1;
+document.getElementById('question').textContent=a+' × '+b+' = '+c;
+document.getElementById('result').textContent='هل العبارة صحيحة أم خاطئة؟';
+}
+function answer(choice){
+if(a===undefined){newQuestion();return}
+stats.total++;
+if(choice===answerValue){
+stats.correct++;
+document.getElementById('result').textContent='أحسنت! إجابة صحيحة 🎉';
+}else{
+stats.wrong++;
+document.getElementById('result').textContent='ليست صحيحة. الناتج هو '+a*b;
+}
+update();
+a=undefined;
+}
+function saveSettings(){
+let n=Number(document.getElementById('minutes').value);
+if(n<1||n>60||!Number.isInteger(n)){
+alert('اختر مدة من 1 إلى 60 دقيقة');return;
+}
+localStorage.minutes=n;
+seconds=n*60;
+document.getElementById('countdown').textContent=n+':00';
+alert('تم حفظ الفترة');
+}
+async function notifyPermission(){
+if(!('Notification' in window)){
+alert('المتصفح لا يدعم الإشعارات');return;
+}
+let p=await Notification.requestPermission();
+document.getElementById('status').textContent=
+p==='granted'?'الإشعارات مفعّلة':'لم يتم السماح بالإشعارات';
+}
+function startTimer(){
+stopTimer();
+let n=Number(localStorage.minutes||5);
+seconds=n*60;
+interval=setInterval(()=>{
+seconds--;
+document.getElementById('countdown').textContent=
+Math.floor(seconds/60)+':'+String(seconds%60).padStart(2,'0');
+if(seconds<=0){
+newQuestion();
+if('Notification' in window && Notification.permission==='granted'){
+new Notification('تحدي الضرب 🎯',{
+body:'حان وقت سؤال جديد! افتح التطبيق للتدريب.'
+});
+}
+seconds=n*60;
+}
+},1000);
+}
+function stopTimer(){
+clearInterval(interval);
+interval=null;
+}
+update();
+</script>
+</body>
+</html>
